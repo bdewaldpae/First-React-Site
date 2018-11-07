@@ -1,0 +1,70 @@
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+
+class Question extends React.Component {
+  handleClick = () => {
+      this.props.onClick(this.props.questionNum);
+  };
+  style() {
+      return {
+          color: 'brown',
+          fontSize: 16,
+          padding: 5,
+          border: "1px solid black",
+          width: 50
+      };
+  };
+  render() {
+      return (
+          <div>
+          {this.state.questions[currentQuestionNum].value1}
+          &nbsp;
+          {this.state.questions[currentQuestionNum].operator}
+          &nbsp;
+          {this.state.questions[currentQuestionNum].value2}
+          </div>
+          <div onClick={this.handleClick} style={this.style()}>Save Answer</div>
+      );
+  }
+}
+
+class Root extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    //this.state = {name: 'Medium'};
+  }
+
+  numQuestions = 2;
+  myQuestions = [];
+  for(var i = 0; i < numQuestions; i++){
+    questions.push({questionNum : i, operator : "+", value1 : 20, value2 : 5, answer : 15, userAnswer : 0 });
+  }
+
+  state = { questions : questions, currentQuestionNum : 0};
+
+  saveAnswer = (userAnswer) => {
+    this.state.questions[this.state.currentQuestionNum].userAnswer = userAnswer;
+    this.state.currentQuestionNum = this.state.currentQuestionNum++;
+    //this.setState({questionNum: e.target.value});
+  }
+
+  operator = "+";
+  value1 = "10";
+  value2 = "5";
+
+  render() {
+    return (
+      <div style={{textAlign: 'center'}}>
+        <h1>Welcome</h1>
+        <p>Hello {this.state.name}</p>
+        <input onChange={this.handleChange} defaultValue={this.state.name}/>
+        <div>test
+          <Question onClick={this.saveAnswer} questionNum={this.state.currentQuestionNum}/>
+        </div>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Root/>, document.getElementById('questionsApp'));

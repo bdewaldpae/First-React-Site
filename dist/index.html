@@ -1,12 +1,29 @@
 
 <html>
     <head>
-      <title>Our app</title>
+      <title>Math Test</title>
+      <style>
+        body{font-family:Arial;padding-top:20px;}
+        .green{color:green;}
+        .red{color:red;}
+        .questionSection{width:150px;text-align:center;margin:0 auto 0 auto;}
+        .question{font-size:40px;  border-bottom:4px solid black; width:150px; text-align:right; margin-top:15px;}
+        .questionDivision{font-size:40px; border-right:4px solid black;border-radius:0 0 15px 0; margin-top:15px; padding-right:5px;}
+        .questionDivisionInside{font-size:40px; border-top:4px solid black; margin-top:15px; padding: 0 10px 0 5px; position: relative; top:4px;}
+        .answerBox{font-size:36px; width:150px; text-align:right; margin-top:5px;}
+        .button{border:1px solid black; padding:5px; margin-top:20px; background-color:cadetblue; color:white;border-radius:5px;}
+        .button:hover{background-color: skyblue; color:black;}
+      </style>
     </head>
-    <body>
+    <body style="text-align:center;margin:0 auto 0 auto;">
       <div id="app"></div>
+      <div id="questionsApp"></div>
       <script src="bundle.js"></script>
-      test in the html
-      and again and a val in branch number 1
+      <script src="siteScripts.js"></script> 
+      <script>
+        $(document).ready(function(){
+          
+        });
+      </script> 
     </body>
   </html>

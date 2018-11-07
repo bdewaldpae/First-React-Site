@@ -15,7 +15,7 @@ class Welcome extends React.Component {
       <div style={{textAlign: 'center'}}>
         <h1>Welcome</h1>
         <p>Hello {this.state.name}</p>
-        <input onChange={this.handleChange} defaultValue={this.state.name}/>
+        <input onClick={this.handleChange} defaultValue={this.state.name}/>
       </div>
     );
   }
