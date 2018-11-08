@@ -83,7 +83,7 @@ class Question extends React.Component {
           </div>
           <div onClick={e => this.handleClick(e)} className="button">Save Answer</div>
         </div>
-    );
+    ); 
     } else {
       return (
           <div className="questionSection">
