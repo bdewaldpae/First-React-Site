@@ -2,6 +2,39 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { formatWithOptions } from 'util';
 
+class Setup extends React.Component {
+  constructor(props){
+    super(props);
+
+  };
+  keyPress(e){
+    const keyCode = e.keyCode || e.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (!/^[0-9\b]+$/.test(keyValue)){
+      e.preventDefault();
+    }
+  }
+  updateNumQuestions(e){
+    var value = e.target.value;
+    const re = /^[0-9\b]+$/;
+    if (value == '' || re.test(value)) {
+      this.setState({numQuestions: value});
+    }
+  }
+  handleSubmit(e){
+    this.props.questions = setUp(this.state.numQuestions);
+    this.props.onClick(this.props.questions);
+  }
+  render() {
+    return (
+      <div  className="questionSection">
+        Number of Questions: <input autoFocus type="text" pattern="[0-9]*" id="answer" onChange={e => this.updateNumQuestions(e)} onKeyPress={e => this.keyPress(e)} className="answerBox" value="10"></input>
+        <div onClick={e => this.handleSubmit(e)} className="button" style={{width:"150px"}}>Save Options</div>
+      </div>
+    );
+  }
+}
+
 class ResultsMessage extends React.Component {
   constructor(props){
     super(props);
@@ -83,7 +116,7 @@ class Question extends React.Component {
           </div>
           <div onClick={e => this.handleClick(e)} className="button">Save Answer</div>
         </div>
-    ); 
+    );
     } else {
       return (
           <div className="questionSection">
@@ -109,8 +142,8 @@ function randomIntFromInterval(min,max) // min and max included
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-function setUp(){
-  var numQuestions = 2;
+function setUp(numberOfQuestions){
+  var numQuestions = numberOfQuestions;
   var myQuestions = [];
   var maxNumber1Add = 999;
   var maxNumber2Add = 999;
@@ -175,16 +208,22 @@ function setUp(){
     myQuestions.push({questionNum : i, operator : operator, operatorText : operatorText, userAnswer:0, userAnswerRemainder:0,
       value1 : value1, value2 : value2, answer : answer, answerRemainder : answerRemainder });
   }
+  
   return myQuestions;
 }
 
 class Root extends React.Component {
     constructor(props) {
       super(props);
+      this.saveOptions = this.saveOptions.bind(this);
       this.saveAnswer = this.saveAnswer.bind(this);
-      this.state = { currentQuestionNum : 0, questions : setUp(), lastAnswer : 0, numberCorrect : 0,
+      this.state = { currentQuestionNum : 0, questions : [], lastAnswer : 0, numberCorrect : 0,
         startTime: new Date(), endTime: "", message : "", styleColor : "green", scoreMessage : "", resultsMessage : ""};
     };
+
+    saveOptions(questionsList){
+      this.setState({questions : questionsList});
+    }
 
     saveAnswer(userAnswer, userAnswerRemainder) {
       var myMessage = "";
@@ -216,7 +255,6 @@ class Root extends React.Component {
       this.setState({currentQuestionNum : newCurrentQuestionNum});
 
       if(newCurrentQuestionNum >= this.state.questions.length){
-        //this.state.endTime = new Date();
         var temp = this.state.numberCorrect;
         var score = (this.state.numberCorrect / this.state.questions.length) * 100;
         var timeInMinutes = (((new Date() - this.state.startTime) / 1000) / 60).toFixed(2);
@@ -241,22 +279,32 @@ class Root extends React.Component {
             </div>
           </div>
         );
+      } else if(this.state.questions.length <= 0) {
+        //displays the setup
+        return (
+          <div style={{width:'100%'}}>
+            <Setup onClick={this.saveOptions} questions={this.state.questions}/>
+          </div>
+        );
       } else {
         //displays results
         return (
           <div>
-            <div style={{fontSize:"26px", color:"green"}}>Completed!</div>
-            <br />
-            <div className={this.state.styleColor}>
-              {this.state.message}
+            <div className={this.state.currentQuestionNum >= this.state.questions.length 
+              && this.state.questions.length > 0 ? "show" : "hide"}>
+              <div style={{fontSize:"26px", color:"green"}}>Completed!</div>
+              <br />
+              <div className={this.state.styleColor}>
+                {this.state.message}
+              </div>
+              <div style={{fontSize:"50px", fontWeight:"bold"}}>
+                {this.state.scoreMessage}
+              </div>
+              <div>
+                {this.state.resultsMessage}
+              </div>
+              <ResultsMessage questions={this.state.questions} />
             </div>
-            <div style={{fontSize:"50px", fontWeight:"bold"}}>
-              {this.state.scoreMessage}
-            </div>
-            <div>
-              {this.state.resultsMessage}
-            </div>
-            <ResultsMessage questions={this.state.questions} />
           </div>
         );
       }
